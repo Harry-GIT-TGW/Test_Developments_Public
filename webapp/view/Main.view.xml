@@ -1,0 +1,44 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:viz="sap.viz.ui5.controls" xmlns:l="sap.ui.layout"
+	xmlns:viz.data="sap.viz.ui5.data" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:f="sap.ui.layout.form"
+	controllerName="com.tgw.WarehouseTasksCharts.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="{i18n>HeaderTitle}">
+		<content>
+			<ScrollContainer height="5%" width="100%" horizontal="false" vertical="true"></ScrollContainer>
+			<l:VerticalLayout width="100%" class="gridWrapper">
+				<l:Grid containerQuery="true" defaultSpan="XL4 L4 M4 S4" position="Center">
+					<l:HorizontalLayout class="sapUiContentPadding">
+						<Label text="{i18n>Lagernummer}" class="sapUiSmallMarginTop"/>
+						<Input id="Lgnum" value="TW06" submit="readViewValuesAndRefresh"/>
+						<Label text="{i18n>Von-Datum}" class="sapUiSmallMarginTop"/>
+						<DatePicker id="IDateFrom" value="01.09.2019" valueFormat="dd.MM.yyyy" change="readViewValuesAndRefresh" displayFormat="long"/>
+						<Label text="{i18n>Bis-Datum}" class="sapUiSmallMarginTop"/>
+						<DatePicker id="IDateTo" value="30.09.2019" valueFormat="dd.MM.yyyy" change="readViewValuesAndRefresh" displayFormat="long"/>
+						<Button id="btnLeft" text="{i18n>Aktualisieren}" press="onBtnRefreshPressed" icon="sap-icon://refresh"/>
+						<Image src="./controller/images/TGW_Logo.png" class="sapUiSmallMarginEnd" densityAware="false" width="350px"/>
+					</l:HorizontalLayout>
+				</l:Grid>
+			</l:VerticalLayout>
+			<viz:VizFrame id="idVizFrame1" uiConfig="{applicationSet: 'fiori'}" height='90%' width="95%" vizType='bar'
+				vizProperties="{title: {text: 'Overview warehouse tasks per day from System TIF'}}">
+				<viz:dataset>
+					<viz.data:FlattenedDataset data="{/EtQuantityPerDaySet}">
+						<viz.data:dimensions>
+							<viz.data:DimensionDefinition name="ConfirmationDate" value="{Date}"></viz.data:DimensionDefinition>
+						</viz.data:dimensions>
+						<viz.data:measures>
+							<viz.data:MeasureDefinition name="Number of WarehouseTasks" value="{Number}"></viz.data:MeasureDefinition>
+						</viz.data:measures>
+						<viz.data:measures>
+							<viz.data:MeasureDefinition name="Quantity in WarehouseTasks" value="{Quantity}"></viz.data:MeasureDefinition>
+						</viz.data:measures>
+					</viz.data:FlattenedDataset>
+				</viz:dataset>
+				<viz:feeds>
+					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Number of WarehouseTasks"></viz.feeds:FeedItem>
+					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Quantity in WarehouseTasks"></viz.feeds:FeedItem>
+					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="ConfirmationDate"></viz.feeds:FeedItem>
+				</viz:feeds>
+			</viz:VizFrame>
+		</content>
+	</Page>
+</mvc:View>
